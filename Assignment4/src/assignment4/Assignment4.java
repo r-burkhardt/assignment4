@@ -1,8 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* ==================================================================
+*
+*   PROGRAM NAME:
+*       Assignment4 - Optical Barcode Readers and Writers
+*
+*   Description:
+*	Barcode......
+*
+*   Classes:
+*       BarcodeIO
+*       BarcodeImage implements Cloneable
+*       DataMatrix implements BarcodeIO
+*
+*   Parameters:
+*       1. none
+*
+*   Additional Files:
+*
+*   Created:
+*       2017/01/25
+*
+*   Author/s:
+*       Roderick Burkhardt, Oswaldo Minez, Faiga Revah
+*
+* ==================================================================*/
+
+
 package assignment4;
 
 
