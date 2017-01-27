@@ -40,16 +40,54 @@ public class Assignment4  // Roderick & Faye
 
 interface BarcodeIO // Oswaldo
 {
-    
+    public boolean scan(BarcodeImage bc);
+    public boolean readText(String text);
+    public boolean generateImageFromText();
+    public boolean translateImageToText();
+    public void displayTestToConsole();
+    public void displayImageToConsole();
 }
 
 class BarcodeImage implements Cloneable // Faye
 {
-
+    public static final int MAX_HEIGHT = 30;
+    public static final int MAX_WIDTH = 65;
+    private boolean[][] image_data;
+    
     public BarcodeImage()
     {
+        
     }
     
+    public BarcodeImage(String[] str_data)
+    {
+        
+    }
+    
+    public boolean getPixel(int row, int col)
+    {
+        return true;
+    }
+  
+    public boolean setPixel(int row, int col, boolean pixel)
+    {
+        return true;
+    }
+    
+    private boolean checkSize(String[] str_data)
+    {
+        return true;
+    }
+    
+    public void displayToConsole()
+    {
+        
+    }
+    
+    public BarcodeImage clone()
+    {
+        return new BarcodeImage();
+    }
 }
 
 class DataMatrix implements BarcodeIO // Roderick
