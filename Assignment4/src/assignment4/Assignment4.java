@@ -28,7 +28,7 @@
 package assignment4;
 
 
-public class Assignment4
+public class Assignment4  // Roderick & Faye
 {
 
     public static void main(String[] args)
@@ -38,17 +38,34 @@ public class Assignment4
     
 }
 
-class BarcodeIO
+interface BarcodeIO // Oswaldo
 {
     
 }
 
-class BarcodeImage implements Cloneable
+class BarcodeImage implements Cloneable // Faye
 {
+
+    public BarcodeImage()
+    {
+    }
     
 }
 
-class DataMatrix
+class DataMatrix implements BarcodeIO // Roderick
 {
+    public DataMatrix()
+    {
+        
+    }
     
+    public DataMatrix(BarcodeImage image)
+    {
+        
+    }
+    
+    public DataMatrix(String text)
+    {
+        
+    }
 }
