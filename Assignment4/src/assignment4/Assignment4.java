@@ -115,4 +115,39 @@ class DataMatrix implements BarcodeIO // Roderick
     {
         
     }
+    
+    public String displayImageToConsole()
+    {
+        return "";
+    }
+    
+    public String generateImageFromText()
+    {
+        return "";
+    }
+    
+    public BarcodeImage translateImageToText()
+    {
+        return new BarcodeImage();
+    }
+    
+    private char readCharFromCol(int col)
+    {
+        return ' ';
+    }
+    
+    private boolean writeCharToCol(int col, int code)
+    {
+        return true;
+    }
+    
+    public void displayRawImage()
+    {
+        
+    }
+    
+    private void clearImage()
+    {
+        
+    }
 }
