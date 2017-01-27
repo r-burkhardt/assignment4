@@ -56,7 +56,10 @@ class BarcodeImage implements Cloneable // Faye
     
     public BarcodeImage()
     {
-        
+        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+        for(int i = 0; i < MAX_HEIGHT; i++)
+            for(int j = 0; j < MAX_WIDTH; j++)
+                image_data[i][j] = false;
     }
     
     public BarcodeImage(String[] str_data)
