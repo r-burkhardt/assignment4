@@ -108,12 +108,26 @@ class BarcodeImage implements Cloneable // Faye
     
     public void displayToConsole()
     {
-        
+        for(int i = 0; i < MAX_HEIGHT; i++)
+        {
+            for (int j = 0; j < MAX_WIDTH; j++)
+            {
+                if(image_data[i][j] == true)
+                    System.out.print("*");
+                else
+                    System.out.print(" ");
+            }
+            System.out.println();
+        }
     }
     
     public BarcodeImage clone()
     {
-        return new BarcodeImage();
+        BarcodeImage bcI = new BarcodeImage();
+        for(int i = 0; i < MAX_HEIGHT; i++)
+            for(int j = 0; j < MAX_WIDTH; j++)
+                bcI.setPixel(j, i, getPixel(j, i));
+        return bcI;
     }
 }
 
