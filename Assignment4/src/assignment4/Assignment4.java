@@ -52,11 +52,10 @@ class BarcodeImage implements Cloneable // Faye
 {
     public static final int MAX_HEIGHT = 30;
     public static final int MAX_WIDTH = 65;
-    private boolean[][] image_data;
+    private boolean[][] image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
     
     public BarcodeImage()
     {
-        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
         for(int i = 0; i < MAX_HEIGHT; i++)
             for(int j = 0; j < MAX_WIDTH; j++)
                 image_data[i][j] = false;
@@ -64,21 +63,46 @@ class BarcodeImage implements Cloneable // Faye
     
     public BarcodeImage(String[] str_data)
     {
-        
+        int height = str_data.length;
+        if(checkSize(str_data))
+        {
+            for(int i = 0; i < height; i++)
+            {
+                
+            }
+        }
+        else
+            for(int i = 0; i < MAX_HEIGHT; i++)
+                for(int j = 0; j < MAX_WIDTH; j++)
+                    image_data[i][j] = false;
     }
     
     public boolean getPixel(int row, int col)
     {
-        return true;
+        if(row < MAX_WIDTH && col < MAX_HEIGHT)
+            return image_data[col][row];
+        return false;
     }
   
     public boolean setPixel(int row, int col, boolean pixel)
     {
-        return true;
+        if(row < MAX_WIDTH && col < MAX_HEIGHT)
+        {
+            image_data[col][row] = pixel;
+            return true;
+        }
+        return false;
     }
     
+    //private method that checks the size of string array
+    //checks if it fits into the dimensions specified by MAX_WIDTH and MAX_HEIGHT
     private boolean checkSize(String[] str_data)
     {
+        if(str_data.length > MAX_HEIGHT)
+            return false;
+        for(int i = 0; i < str_data.length; i++)
+            if(str_data[i].length() > MAX_WIDTH)
+                return false;
         return true;
     }
     
