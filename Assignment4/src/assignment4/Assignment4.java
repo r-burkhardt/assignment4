@@ -33,8 +33,15 @@ public class Assignment4  // Roderick & Faye
 
     public static void main(String[] args)
     {
-        // TODO code application logic here
-    }
+        BarcodeImage bci = new BarcodeImage();
+        //bci.displayToConsole();
+        String[] strArr = new String[15];
+        for(int i = 0; i < strArr.length; i++)
+        {
+            strArr[i] = "*** ***** ** * * *** * **************S**";
+        }
+        BarcodeImage bciII = new BarcodeImage(strArr);
+        bciII.displayToConsole();
     
 }
 
@@ -48,14 +55,15 @@ interface BarcodeIO // Oswaldo
     public void displayImageToConsole();
 }
 
-class BarcodeImage implements Cloneable // Faye
+static class BarcodeImage implements Cloneable // Faye
 {
     public static final int MAX_HEIGHT = 30;
     public static final int MAX_WIDTH = 65;
-    private boolean[][] image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+    private boolean[][] image_data;
     
     public BarcodeImage()
     {
+        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
         for(int i = 0; i < MAX_HEIGHT; i++)
             for(int j = 0; j < MAX_WIDTH; j++)
                 image_data[i][j] = false;
@@ -63,13 +71,19 @@ class BarcodeImage implements Cloneable // Faye
     
     public BarcodeImage(String[] str_data)
     {
-        int height = str_data.length;
+        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
         if(checkSize(str_data))
         {
+            int height = str_data.length;
+            int firstRow = MAX_HEIGHT - height;
             for(int i = 0; i < height; i++)
-            {
-                
-            }
+                for(int j = 0; j < str_data[i].length(); j++)
+                {
+                    if(str_data[i].charAt(j) == '*')
+                        image_data[i + height][j] = true;
+                    else
+                        image_data[i + height][j] = false;
+                }
         }
         else
             for(int i = 0; i < MAX_HEIGHT; i++)
@@ -101,7 +115,7 @@ class BarcodeImage implements Cloneable // Faye
         if(str_data.length > MAX_HEIGHT)
             return false;
         for(int i = 0; i < str_data.length; i++)
-            if(str_data[i].length() > MAX_WIDTH)
+            if(str_data[i].length() > MAX_WIDTH || str_data[i] == null)
                 return false;
         return true;
     }
@@ -130,7 +144,8 @@ class BarcodeImage implements Cloneable // Faye
         return bcI;
     }
 }
-
+}
+/*
 class DataMatrix implements BarcodeIO // Roderick
 {
     public static final char BLACK_CHAR = '*';
@@ -229,4 +244,4 @@ class DataMatrix implements BarcodeIO // Roderick
     {
         
     }
-}
+}*/
