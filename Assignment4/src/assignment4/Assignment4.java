@@ -150,14 +150,14 @@ class DataMatrix implements BarcodeIO // Roderick
     
     public DataMatrix(BarcodeImage image)
     {
-        image = scan(image);
+        scan(image);
         text = " ";
     }
     
     public DataMatrix(String text)
     {
         image = new BarcodeImage();
-        text = readText(text);
+        readText(text);
     }
     
     public boolean readText(String text)
@@ -195,19 +195,24 @@ class DataMatrix implements BarcodeIO // Roderick
         
     }
     
-    public String displayImageToConsole()
+    public void displayTestToConsole()
     {
-        return "";
+        
     }
     
-    public String generateImageFromText()
+    public void displayImageToConsole()
     {
-        return "";
+        
     }
     
-    public BarcodeImage translateImageToText()
+    public boolean generateImageFromText()
     {
-        return new BarcodeImage();
+        return true;
+    }
+    
+    public boolean translateImageToText()
+    {
+        return true;
     }
     
     private char readCharFromCol(int col)
