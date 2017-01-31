@@ -33,6 +33,50 @@ public class Assignment4  // Roderick & Faye
 
     public static void main(String[] args)
     {
+        BarcodeImage testBar = new BarcodeImage(args);
+        String barcodeInfo = "                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"  * * * * * * * * * * * * * * * * * * *                         " +
+"  *                                    *                        " +
+"  **** *** **   ***** ****   *********                          " +
+"  * ************ ************ **********                        " +
+"  ** *      *    *  * * *         * *                           " +
+"  ***   *  *           * **    *      **                        " +
+"  * ** * *  *   * * * **  *   ***   ***                         " +
+"  * *           **    *****  *   **   **                        " +
+"  ****  *  * *  * **  ** *   ** *  * *                          " +
+"  **************************************                        " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                " +
+"                                                                ";
+        int y = 0;
+        for (int c = 0; c < barcodeInfo.length(); c++)
+        {
+            if (c%64 == 0 && c != 0)
+                y++;
+            if (barcodeInfo.charAt(c) != ' ')
+                testBar.setPixel(c%64, y, true);
+                
+        }
+        
+        testBar.displayToConsole();
+        
+        DataMatrix test = new DataMatrix(testBar);
         // TODO code application logic here
     }
     
@@ -162,11 +206,23 @@ class DataMatrix implements BarcodeIO // Roderick
     
     public boolean readText(String text)
     {
+        this.text = text;
         return true;
     }
     
     public boolean scan(BarcodeImage image)
     {
+        try
+        {
+            this.image = image.clone();
+        }
+        catch (Exception e)
+        {
+            
+        }
+        cleanImage(this.image);
+        this.actualWidth = 0;
+        this.actualHeight = 0;
         return true;
     }
     
@@ -182,6 +238,7 @@ class DataMatrix implements BarcodeIO // Roderick
     
     private int computeSignalWidth()
     {
+        
         return 0;
     }
     
@@ -190,8 +247,27 @@ class DataMatrix implements BarcodeIO // Roderick
         return 0;
     }
     
-    private void cleanImage()
+    private void cleanImage(BarcodeImage image)
     {
+        int leftEdge = 0;
+        int bottomEdge = 0;
+        
+        for (int y = (BarcodeImage.MAX_HEIGHT - 1); y >= 0; y--)
+        {
+            for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
+            {
+                if (image.getPixel(x, y))
+                {
+                    leftEdge = x;
+                    bottomEdge = y;
+                    break;
+                }
+            }
+        }
+        
+        moveImageToLowerLeft(leftEdge, bottomEdge);
+        
+        
         
     }
     
@@ -233,5 +309,19 @@ class DataMatrix implements BarcodeIO // Roderick
     private void clearImage()
     {
         
+    }
+    
+    private void moveImageToLowerLeft(int leftShift, int downShift)
+    {
+        int distToBottom = BarcodeImage.MAX_HEIGHT-downShift;
+        
+        for (int x = leftShift; x < BarcodeImage.MAX_WIDTH; x++)
+        {
+            for (int y = downShift; y >= 0; y--)
+            {
+                this.image.setPixel(x - leftShift, y + distToBottom,
+                        image.getPixel(x, y));
+            }
+        }
     }
 }
