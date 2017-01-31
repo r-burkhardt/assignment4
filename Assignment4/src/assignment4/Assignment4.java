@@ -256,13 +256,9 @@ class DataMatrix implements BarcodeIO // Roderick
             for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
             {
                 if (left == 0 && image.getPixel(x, y))
-                {
-                    System.out.println("left " + y);
                     left = x;
-                }
-                    
                 if (image.getPixel(x, y))
-                    System.out.println(x+1); //right = y+1;
+                    right = y+1;
             }
         }
         
