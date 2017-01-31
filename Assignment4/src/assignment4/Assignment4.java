@@ -33,7 +33,7 @@ public class Assignment4  // Roderick & Faye
 
     public static void main(String[] args)
     {
-        BarcodeImage testBar = new BarcodeImage();
+        //BarcodeImage testBar = new BarcodeImage();
         String[] barcodeInfo = 
         {
             "                                           ",
@@ -53,7 +53,7 @@ public class Assignment4  // Roderick & Faye
             "                                           ",
             "                                           "
         };
-        int y = 0;
+        /*int y = 0;
         for (int s = 0; s < barcodeInfo.length; s++)
         {
             for (int c = 0; c < barcodeInfo[s].length(); c++)
@@ -64,8 +64,8 @@ public class Assignment4  // Roderick & Faye
                 }
             }
                 
-        }
-        //BarcodeImage testBar = new BarcodeImage(barcodeInfo);
+        }*/
+        BarcodeImage testBar = new BarcodeImage(barcodeInfo);
         
         testBar.displayToConsole();
         
@@ -105,7 +105,7 @@ class BarcodeImage implements Cloneable // Faye
     
     public BarcodeImage(String[] str_data)
     {
-        image_data = new boolean[MAX_WIDTH][MAX_HEIGHT];
+        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
         if(checkSize(str_data))
         {
             int height = str_data.length;
