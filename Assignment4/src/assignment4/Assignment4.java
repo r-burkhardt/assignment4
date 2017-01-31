@@ -33,43 +33,47 @@ public class Assignment4  // Roderick & Faye
 
     public static void main(String[] args)
     {
-        
+        BarcodeImage testBar = new BarcodeImage();
         String[] barcodeInfo = 
         {
-            "                                          ",
-            "                                          ",
-            "* * * * * * * * * * * * * * * * * * *     ",
-            "*                                    *    ",
-            "**** *** **   ***** ****   *********      ",
-            "* ************ ************ **********    ",
-            "** *      *    *  * * *         * *       ",
-            "***   *  *           * **    *      **    ",
-            "* ** * *  *   * * * **  *   ***   ***     ",
-            "* *           **    *****  *   **   **    ",
-            "****  *  * *  * **  ** *   ** *  * *      ",
-            "**************************************    ",
-            "                                          ",
-            "                                          ",
-            "                                          ",
-            "                                          "
+            "                                           ",
+            "                                           ",
+            " * * * * * * * * * * * * * * * * * * *     ",
+            " *                                    *    ",
+            " **** *** **   ***** ****   *********      ",
+            " * ************ ************ **********    ",
+            " ** *      *    *  * * *         * *       ",
+            " ***   *  *           * **    *      **    ",
+            " * ** * *  *   * * * **  *   ***   ***     ",
+            " * *           **    *****  *   **   **    ",
+            " ****  *  * *  * **  ** *   ** *  * *      ",
+            " **************************************    ",
+            "                                           ",
+            "                                           ",
+            "                                           ",
+            "                                           "
         };
-        /*int y = 0;
+        int y = 0;
         for (int s = 0; s < barcodeInfo.length; s++)
         {
             for (int c = 0; c < barcodeInfo[s].length(); c++)
             {
-                testBar
+                if (barcodeInfo[s].charAt(c) == '*')
+                {
+                    testBar.setPixel(s, c, true);
+                }
             }
                 
-        }*/
-        BarcodeImage testBar = new BarcodeImage(barcodeInfo);
+        }
+        //BarcodeImage testBar = new BarcodeImage(barcodeInfo);
         
         testBar.displayToConsole();
         
         DataMatrix test = new DataMatrix(testBar);
         
-        System.out.println(test.computeSignalWidth());
-        System.out.println(test.computeSignalHeight());
+        //test.displayToConsole();
+        //System.out.println(test.computeSignalWidth());
+        //System.out.println(test.computeSignalHeight());
         // TODO code application logic here
     }
     
@@ -93,15 +97,15 @@ class BarcodeImage implements Cloneable // Faye
     
     public BarcodeImage()
     {
-        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
-        for(int i = 0; i < MAX_HEIGHT; i++)
-            for(int j = 0; j < MAX_WIDTH; j++)
+        image_data = new boolean[MAX_WIDTH][MAX_HEIGHT];
+        for(int i = 0; i < MAX_WIDTH; i++)
+            for(int j = 0; j < MAX_HEIGHT; j++)
                 image_data[i][j] = false;
     }
     
     public BarcodeImage(String[] str_data)
     {
-        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+        image_data = new boolean[MAX_WIDTH][MAX_HEIGHT];
         if(checkSize(str_data))
         {
             int height = str_data.length;
@@ -152,9 +156,9 @@ class BarcodeImage implements Cloneable // Faye
     
     public void displayToConsole()
     {
-        for(int i = 0; i < MAX_HEIGHT; i++)
+        for(int i = 0; i < MAX_WIDTH; i++)
         {
-            for (int j = 0; j < MAX_WIDTH; j++)
+            for (int j = 0; j < MAX_HEIGHT; j++)
             {
                 if(image_data[i][j] == true)
                     System.out.print("*");
@@ -237,7 +241,7 @@ class DataMatrix implements BarcodeIO // Roderick
         return actualHeight;
     }
     
-    public int computeSignalWidth()
+    private int computeSignalWidth()
     {
         int left = 0;
         int right = 0;
@@ -256,7 +260,7 @@ class DataMatrix implements BarcodeIO // Roderick
         return right - left;
     }
     
-    public int computeSignalHeight()
+    private int computeSignalHeight()
     {
         int top = 0;
         int bottom = 0;
@@ -295,8 +299,6 @@ class DataMatrix implements BarcodeIO // Roderick
         
         moveImageToLowerLeft(leftEdge, bottomEdge);
         
-        
-        
     }
     
     public void displayTestToConsole()
@@ -306,7 +308,7 @@ class DataMatrix implements BarcodeIO // Roderick
     
     public void displayImageToConsole()
     {
-        
+        image.displayToConsole();
     }
     
     public boolean generateImageFromText()
