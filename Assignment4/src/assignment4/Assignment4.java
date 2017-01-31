@@ -77,6 +77,8 @@ public class Assignment4  // Roderick & Faye
         testBar.displayToConsole();
         
         DataMatrix test = new DataMatrix(testBar);
+        
+        System.out.println(test.computeSignalWidth());
         // TODO code application logic here
     }
     
@@ -244,10 +246,27 @@ class DataMatrix implements BarcodeIO // Roderick
         return actualHeight;
     }
     
-    private int computeSignalWidth()
+    public int computeSignalWidth()
     {
+        int left = 0;
+        int right = 0;
         
-        return 0;
+        for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
+        {
+            for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
+            {
+                if (left == 0 && image.getPixel(x, y))
+                {
+                    System.out.println("left " + y);
+                    left = x;
+                }
+                    
+                if (image.getPixel(x, y))
+                    System.out.println(x+1); //right = y+1;
+            }
+        }
+        
+        return right - left;
     }
     
     private int computeSignalHeight()
