@@ -90,9 +90,11 @@ public class Assignment4  // Roderick & Faye
         BarcodeImage testBar = new BarcodeImage(barcodeInfo2);
         
         //testBar.displayToConsole();
+        //System.out.println(testBar.getPixel(29, 0));
         
         DataMatrix test = new DataMatrix(testBar);
         
+        //test.displayBarcode();
         test.displayImageToConsole();
         //test.displayRawImage();
         //System.out.println(test.computeSignalWidth());
@@ -212,6 +214,11 @@ class DataMatrix implements BarcodeIO // Roderick
     private int actualWidth;
     private int actualHeight;
     
+    public void displayBarcode()
+    {
+        image.displayToConsole();
+    }
+    
     public DataMatrix()
     {
         image = new BarcodeImage();
@@ -249,7 +256,7 @@ class DataMatrix implements BarcodeIO // Roderick
         }
         catch (Exception e)
         {
-            
+            System.err.println("clone failed");
         }
         //cleanImage(this.image);
         this.actualWidth = 0;
@@ -277,9 +284,9 @@ class DataMatrix implements BarcodeIO // Roderick
             for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
             {
                 if (left == 0 && image.getPixel(y, x))
-                    left = x;
+                    left = y;
                 if (image.getPixel(y, x))
-                    right = x+1;
+                    right = y+1;
             }
         }
         return right - left;
@@ -294,10 +301,11 @@ class DataMatrix implements BarcodeIO // Roderick
         {
             for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
             {
+                //System.out.println(image.getPixel(y, x));
                 if (top == 0 && image.getPixel(y, x))
-                    top = y;
+                    top = x;
                 if (image.getPixel(y, x))
-                    bottom = y+1;
+                    bottom = x+1;
             }
         }
         return bottom - top;
@@ -336,21 +344,23 @@ class DataMatrix implements BarcodeIO // Roderick
     @Override
     public void displayImageToConsole()
     {
-        String displayString = "****************************************";
+        
+        //System.out.println(computeSignalHeight());
+        //System.out.println(computeSignalWidth());
         for (int y = BarcodeImage.MAX_HEIGHT - computeSignalHeight();
-                    y < (BarcodeImage.MAX_HEIGHT-2); y++ )
+                    y < (BarcodeImage.MAX_HEIGHT); y++ )
         {
-            for (int x = 1; x < computeSignalWidth(); x++)
+            for (int x = 0; x < computeSignalWidth(); x++)
             {
                 if (image.getPixel(y, x))
-                    displayString += '*';
+                    System.out.print('*');//displayString += '*';
                 else
-                    displayString += ' ';
+                    System.out.print(' ');//displayString += ' ';
             }
-            displayString += "\n";
+            System.out.println();//displayString += "\n";
         }
         
-        System.out.println(displayString);
+        //System.out.println(displayString);
     }
     
     @Override
