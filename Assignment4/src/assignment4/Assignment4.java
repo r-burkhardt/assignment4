@@ -115,7 +115,7 @@ public class Assignment4  // Roderick & Faye
         
         String stringToBarcode = "Optical Barcode Readers and Writers";
         
-        BarcodeImage testBar = new BarcodeImage(barcodeInfo3);
+        BarcodeImage testBar = new BarcodeImage(barcodeInfo);
         
         //testBar.displayToConsole();
         //System.out.println(testBar.getPixel(29, 0));
@@ -128,8 +128,8 @@ public class Assignment4  // Roderick & Faye
         //test.displayRawImage();
         test.translateImageToText();
 
-        testStringMatrix.generateImageFromText();
-        testStringMatrix.displayRawImage();
+        //testStringMatrix.generateImageFromText();
+        //testStringMatrix.displayRawImage();
         test.displayTextToConsole();
     }
     
@@ -431,7 +431,7 @@ class DataMatrix implements BarcodeIO // Roderick
     public boolean translateImageToText()
     {
         String newString = "";
-        for (int x = 1; x < 38; x++)
+        for (int x = 1; x < computeSignalWidth()-1; x++)
         {
             newString += readCharFromCol(x);
         }
@@ -478,6 +478,7 @@ class DataMatrix implements BarcodeIO // Roderick
                         newChar += 0;
                 }
             }
+            rowCount++;
         }
         return (char)newChar;
     }
