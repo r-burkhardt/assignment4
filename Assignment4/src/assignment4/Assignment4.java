@@ -105,14 +105,15 @@ public class Assignment4  // Roderick & Faye
         DataMatrix test = new DataMatrix(testBar);
         
         test.displayImageToConsole();
-        System.out.println(test.computeSignalWidth());
+        test.displayRawImage();
+        //System.out.println(test.computeSignalWidth());
         //System.out.println(test.computeSignalHeight());
         // TODO code application logic here
     }
     
 }
 
-interface BarcodeIO // Oswaldo
+interface BarcodeIO // Faye
 {
     public boolean scan(BarcodeImage bc);
     public boolean readText(String text);
@@ -277,7 +278,7 @@ class DataMatrix implements BarcodeIO // Roderick
         return actualHeight;
     }
     
-    public int computeSignalWidth()
+    private int computeSignalWidth()
     {
         int left = 0;
         int right = 0;
@@ -342,7 +343,7 @@ class DataMatrix implements BarcodeIO // Roderick
     @Override
     public void displayTextToConsole()
     {
-        
+        System.out.println(this.text);
     }
     
     @Override
@@ -369,33 +370,151 @@ class DataMatrix implements BarcodeIO // Roderick
     @Override
     public boolean generateImageFromText()
     {
+        for (int topBorder = 0; topBorder <= this.text.length(); topBorder++)
+        {
+            if (topBorder % 2 == 0)
+            {
+                this.image.setPixel(0, topBorder, true);
+            }
+        }
+        for (int leftBorder = 1; leftBorder < 9; leftBorder++)
+        {
+            this.image.setPixel(leftBorder, 0, true);
+        }
+        for (int c = 1; c <= this.text.length(); c++)
+        {
+            writeCharToCol(c, this.text.charAt(c));
+        }
+        for (int bottomBorder = 0; bottomBorder <= this.text.length();
+                bottomBorder++)
+        {
+            this.image.setPixel(9, bottomBorder, true);
+        }
         return true;
     }
     
     @Override
     public boolean translateImageToText()
     {
+        String newString = "";
+        for (int x = 1; x < 38; x++)
+        {
+            newString += readCharFromCol(x);
+        }
+        this.text = newString;
         return true;
     }
     
     private char readCharFromCol(int col)
     {
-        return ' ';
+        int newChar = 0;
+        int rowCount = 0;
+        for (int y = BarcodeImage.MAX_HEIGHT- 2;
+                y > BarcodeImage.MAX_HEIGHT- 10; y--)
+        {
+            if (this.image.getPixel(col, y))
+            {
+                switch (rowCount)
+                {
+                    case 0:
+                        newChar += 1;
+                        break;
+                    case 1:
+                        newChar += 2;
+                        break;
+                    case 2:
+                        newChar += 4;
+                        break;
+                    case 3:
+                        newChar += 8;
+                        break;
+                    case 4:
+                        newChar += 16;
+                        break;
+                    case 5:
+                        newChar += 32;
+                        break;
+                    case 6:
+                        newChar += 64;
+                        break;
+                    case 7:
+                        newChar += 128;
+                        break;
+                    default:
+                        newChar += 0;
+                }
+            }
+        }
+        return (char)newChar;
     }
     
     private boolean writeCharToCol(int col, int code)
     {
+        if (code % 2 == 1)
+        {
+            this.image.setPixel(8, col, true);
+            code -= 1;
+        }
+        if (code - 128 >= 0)
+        {
+            this.image.setPixel(1, col, true);
+            code -= 128;
+        }
+        if (code - 64 >= 0)
+        {
+            this.image.setPixel(2, col, true);
+            code -= 64;
+        }
+        if (code - 32 >= 0)
+        {
+            this.image.setPixel(3, col, true);
+            code -= 32;
+        }
+        if (code - 16 >= 0)
+        {
+            this.image.setPixel(4, col, true);
+            code -= 16;
+        }
+        if (code - 8 >= 0)
+        {
+            this.image.setPixel(5, col, true);
+            code -= 8;
+        }
+        if (code - 4 >= 0)
+        {
+            this.image.setPixel(6, col, true);
+            code -= 4;
+        }
+        if (code - 2 >= 0)
+        {
+            this.image.setPixel(7, col, true);
+            code -= 2;
+        }            
         return true;
     }
     
     public void displayRawImage()
     {
-        
+        String displayString = "";
+        for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
+        {
+            for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
+            {
+                if (this.image.getPixel(y, x))
+                    displayString += '*';
+                else
+                    displayString += ' ';
+            }
+            displayString += "\n";
+        }
+        System.out.println(displayString);
     }
     
     private void clearImage()
     {
-        
+        for (int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
+            for (int j = 0; j < BarcodeImage.MAX_WIDTH; j++)
+                image.setPixel(i, j, false);
     }
     
     private void moveImageToLowerLeft(int leftShift, int downShift)
