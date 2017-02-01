@@ -4,7 +4,17 @@
 *       Assignment4 - Optical Barcode Readers and Writers
 *
 *   Description:
-*	Barcode......
+*	Industrial application that can read text from a barcode with optical
+*       scanning and pattern recognition. This works by converting the sequence
+*       of 8 characters in each column of a barcode into the ASCII codes. The
+*       class defines a BarcodeIO interface that defines the basic method of
+*       any barcode class implementing it.
+*       The BarcodeImage class implements the built-in cloneable interface 
+*       and overrides the clone() method. It is a 2D representation of the 
+*       data of a barcode, which is stored in a 2D array of booleans. The 
+*       final class, Datamatrix, implements the BarcodeIO interface, and it 
+*       can convert between a barcode to text. It is not a true Datamatrix 
+*       because it does not have error correction or encoding. 
 *
 *   Classes:
 *       BarcodeIO
@@ -101,6 +111,8 @@ public class Assignment4  // Roderick & Faye
     
 }
 
+    //any class that implements BarcodeIO is expected to store some version
+    //of an image and some version of the text associated with the image.
 interface BarcodeIO // Faye
 {
     public boolean scan(BarcodeImage bc);
@@ -111,12 +123,15 @@ interface BarcodeIO // Faye
     public void displayImageToConsole();
 }
 
+    //class BarcodeImage realizes all essential data and methods associated with a 
+    //2D pattern- bar code. It stores and retrieves 2D data
 class BarcodeImage implements Cloneable // Faye
 {
     public static final int MAX_HEIGHT = 30;
     public static final int MAX_WIDTH = 65;
     private boolean[][] image_data;
     
+    //default constructor
     public BarcodeImage()
     {
         image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
@@ -125,6 +140,9 @@ class BarcodeImage implements Cloneable // Faye
                 image_data[i][j] = false;
     }
     
+    //constructor BarcodeImage(String[]) accepts a string array
+    //and converts the array to a 2D array of booleans. It is stored
+    //in the bottom, left corner of the array.
     public BarcodeImage(String[] str_data)
     {
         image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
@@ -147,13 +165,15 @@ class BarcodeImage implements Cloneable // Faye
                     image_data[i][j] = false;
     }
     
+    //returns a pixel at a given coordinate
     public boolean getPixel(int row, int col)
     {
         if(row < MAX_HEIGHT && col < MAX_WIDTH)
             return image_data[row][col];
         return false;
     }
-  
+    
+    //sets pixel at a given coordinate
     public boolean setPixel(int row, int col, boolean pixel)
     {
         if(row < MAX_HEIGHT && col < MAX_WIDTH)
@@ -176,6 +196,8 @@ class BarcodeImage implements Cloneable // Faye
         return true;
     }
     
+    //method to display the 2D image_data to console in the form of 
+    // '*' for true and ' ' for false.
     public void displayToConsole()
     {
         for (int i = 0; i < MAX_WIDTH+2; i++)
@@ -198,6 +220,8 @@ class BarcodeImage implements Cloneable // Faye
         System.out.println("");
     }
     
+    //implements the Cloneable's clone() method. Deals with deep data and creates
+    //a copy of the this object. Returns the new BarcodeImage.
     public BarcodeImage clone()
     {
         BarcodeImage bcI = new BarcodeImage();
@@ -218,6 +242,8 @@ class DataMatrix implements BarcodeIO // Roderick
     private int actualWidth;
     private int actualHeight;
     
+    // Default Constructor
+    // creates a blank object when a called.
     public DataMatrix()
     {
         image = new BarcodeImage();
@@ -226,30 +252,47 @@ class DataMatrix implements BarcodeIO // Roderick
         actualHeight = 0;
     }
     
+    // Constructor method with a BarcodeImage parameter
+    // Construstor calls scan which clones the BarcodeImage parameter 
+    // over to the DataMatrix object's own image
+    // set the DataMatrix's test to default blank
     public DataMatrix(BarcodeImage image)
     {
         scan(image);
         text = " ";
     }
     
+    // Constructor method with a String parameter
+    // Constructor calls readText which tests string length againist
+    // BarcodeImage object MAX_WIDTH
+    // Initializes image to a blank BarcodeImage
     public DataMatrix(String text)
     {
-        image = new BarcodeImage();
+        this.image = new BarcodeImage();
         if(!readText(text))
             readText(" ");
     }
     
+    // readText method is used to test the string for length validity, if the 
+    // string is a valid length, it sets the text variable to the test parameter
+    // and returns true.
     @Override
     public boolean readText(String text)
     {
         if (text.length() < BarcodeImage.MAX_WIDTH-2)
         {
             this.text = text;
+            this.actualHeight = 0;
+            this.actualWidth = 0;
             return true;
         }
         return false;
     }
     
+    // Scane Method is called by contrustor when an image is passed to the 
+    // constructor. it clones the incoming image over to the object's private 
+    // BarcodeImage variable. It than calls the the cleanIamge method, sets the 
+    // actualHeight and actualWidth variables.
     @Override
     public boolean scan(BarcodeImage image)
     {
@@ -277,6 +320,8 @@ class DataMatrix implements BarcodeIO // Roderick
         return actualHeight;
     }
     
+    // Computer the width of only the BarcodeImage that is actually the barcode
+    // without the surrounding white space. 
     private int computeSignalWidth()
     {
         int left = -1;
@@ -295,6 +340,8 @@ class DataMatrix implements BarcodeIO // Roderick
         return right - left;
     }
     
+    // Computer the Height of only the BarcodeImage that is actually the barcode
+    // without the surrounding white space. 
     private int computeSignalHeight()
     {
         int top = 0;
@@ -313,6 +360,10 @@ class DataMatrix implements BarcodeIO // Roderick
         return bottom - top;
     }
     
+    // cleanImage is used to clean up the image with the help of
+    // moveImageToLowerLeft by placing the image in the lower left corner of the 
+    // BarcodeImage box, leaving the white space only above and below the
+    // barcode.
     private void cleanImage(BarcodeImage image)
     {
         int leftEdge = 0;
@@ -339,12 +390,16 @@ class DataMatrix implements BarcodeIO // Roderick
         moveImageToLowerLeft(leftEdge, bottomEdge);
     }
     
+    // Outputs the objects text to the screen
     @Override
     public void displayTextToConsole()
     {
         System.out.println(this.text);
     }
     
+    // Displays the objects barcode image to the screen for viewing. When it
+    // displays the barcode, it crops the barcode down to only the relevent
+    // portiton croping off excessive white space.
     @Override
     public void displayImageToConsole()
     {
@@ -366,6 +421,7 @@ class DataMatrix implements BarcodeIO // Roderick
         }
     }
     
+    // converts the text of the object into a barcode
     @Override
     public boolean generateImageFromText()
     {
@@ -390,9 +446,12 @@ class DataMatrix implements BarcodeIO // Roderick
             this.image.setPixel(9, bottomBorder, true);
         }
         cleanImage(image);
+        this.actualHeight = computeSignalHeight();
+        this.actualWidth = computeSignalWidth();
         return true;
     }
     
+    // converts the image into text that is saved to the objects text variable
     @Override
     public boolean translateImageToText()
     {
@@ -405,6 +464,9 @@ class DataMatrix implements BarcodeIO // Roderick
         return true;
     }
     
+    // helper method for translateImageToText, thaking the parameter of a column
+    // reads that columns true/false to determine what ascii code is in each 
+    // column
     private char readCharFromCol(int col)
     {
         int newChar = 0;
@@ -449,6 +511,8 @@ class DataMatrix implements BarcodeIO // Roderick
         return (char)newChar;
     }
     
+    // helper method for generateImageFromText, that takes an ascii code and
+    // converts it into the columns that are stored in the image array
     private boolean writeCharToCol(int col, int code)
     {
         if (code % 2 == 1)
@@ -494,6 +558,7 @@ class DataMatrix implements BarcodeIO // Roderick
         return true;
     }
     
+    // Dsiplays the barcode in it full size with all white space
     public void displayRawImage()
     {
         for (int i = 0; i < BarcodeImage.MAX_WIDTH+2; i++)
@@ -516,6 +581,7 @@ class DataMatrix implements BarcodeIO // Roderick
         System.out.println("");
     }
     
+    // wipes an image to all blank
     private void clearImage()
     {
         for (int i = 0; i < BarcodeImage.MAX_HEIGHT; i++)
@@ -523,6 +589,8 @@ class DataMatrix implements BarcodeIO // Roderick
                 image.setPixel(i, j, false);
     }
     
+    // helper method for cleanImage, it moves the barcode from where ever it is
+    // located im the barcodeImage box and places it in the bottom left corner.
     private void moveImageToLowerLeft(int leftShift, int downShift)
     {
         int distToBottom = BarcodeImage.MAX_HEIGHT-downShift-1;
