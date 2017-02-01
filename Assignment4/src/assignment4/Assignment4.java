@@ -33,104 +33,70 @@ public class Assignment4  // Roderick & Faye
 
     public static void main(String[] args)
     {
-        //BarcodeImage testBar = new BarcodeImage();
-        String[] barcodeInfo = 
-        {
-            "                                               ",
-            "                                               ",
-            "                                               ",
-            "     * * * * * * * * * * * * * * * * * * * * * ",
-            "     *                                       * ",
-            "     ****** **** ****** ******* ** *** *****   ",
-            "     *     *    ****************************** ",
-            "     * **    * *        **  *    * * *   *     ",
-            "     *   *    *  *****    *   * *   *  **  *** ",
-            "     *  **     * *** **   **  *    **  ***  *  ",
-            "     ***  * **   **  *   ****    *  *  ** * ** ",
-            "     *****  ***  *  * *   ** ** **  *   * *    ",
-            "     ***************************************** ",  
-            "                                               ",
-            "                                               ",
-            "                                               "
-        };
-        String[] barcodeInfo2 =
-        {
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "* * * * * * * * * * * * * * * * * * *                           ",
-            "*                                    *                          ",
-            "**** *** **   ***** ****   *********                            ",
-            "* ************ ************ **********                          ",
-            "** *      *    *  * * *         * *                             ",
-            "***   *  *           * **    *      **                          ",
-            "* ** * *  *   * * * **  *   ***   ***                           ",
-            "* *           **    *****  *   **   **                          ",
-            "****  *  * *  * **  ** *   ** *  * *                            ",
-            "**************************************                          "
-        };
-        String[] barcodeInfo3 =
-        {
-            "                                                   ",
-            "                                                   ",
-            "         * * * * * * * * * * * * * * * * * * *     ",
-            "         *                                    *    ",
-            "         **** *** **   ***** ****   *********      ",
-            "         * ************ ************ **********    ",
-            "         ** *      *    *  * * *         * *       ",
-            "         ***   *  *           * **    *      **    ",
-            "         * ** * *  *   * * * **  *   ***   ***     ",
-            "         * *           **    *****  *   **   **    ",
-            "         ****  *  * *  * **  ** *   ** *  * *      ",
-            "         **************************************    ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   ",
-            "                                                   "
+        String[] sImageIn =
+      {
+         "                                               ",
+         "                                               ",
+         "                                               ",
+         "     * * * * * * * * * * * * * * * * * * * * * ",
+         "     *                                       * ",
+         "     ****** **** ****** ******* ** *** *****   ",
+         "     *     *    ****************************** ",
+         "     * **    * *        **  *    * * *   *     ",
+         "     *   *    *  *****    *   * *   *  **  *** ",
+         "     *  **     * *** **   **  *    **  ***  *  ",
+         "     ***  * **   **  *   ****    *  *  ** * ** ",
+         "     *****  ***  *  * *   ** ** **  *   * *    ",
+         "     ***************************************** ",  
+         "                                               ",
+         "                                               ",
+         "                                               "
 
-        };
-        
-        String stringToBarcode = "Optical Barcode Readers and Writers";
-        
-        BarcodeImage testBar = new BarcodeImage(barcodeInfo);
-        
-        //testBar.displayToConsole();
-        //System.out.println(testBar.getPixel(29, 0));
-        
-        DataMatrix test = new DataMatrix(testBar);
-        DataMatrix testStringMatrix = new DataMatrix(stringToBarcode);
-        
-        //test.displayBarcode();
-        //test.displayImageToConsole();
-        //test.displayRawImage();
-        test.translateImageToText();
+      };      
+            
+         
+      
+      String[] sImageIn_2 =
+      {
+            "                                          ",
+            "                                          ",
+            "* * * * * * * * * * * * * * * * * * *     ",
+            "*                                    *    ",
+            "**** *** **   ***** ****   *********      ",
+            "* ************ ************ **********    ",
+            "** *      *    *  * * *         * *       ",
+            "***   *  *           * **    *      **    ",
+            "* ** * *  *   * * * **  *   ***   ***     ",
+            "* *           **    *****  *   **   **    ",
+            "****  *  * *  * **  ** *   ** *  * *      ",
+            "**************************************    ",
+            "                                          ",
+            "                                          ",
+            "                                          ",
+            "                                          "
 
-        //testStringMatrix.generateImageFromText();
-        //testStringMatrix.displayRawImage();
-        test.displayTextToConsole();
+      };
+     
+      BarcodeImage bc = new BarcodeImage(sImageIn);
+      DataMatrix dm = new DataMatrix(bc);
+     
+      // First secret message
+      dm.translateImageToText();
+      dm.displayTextToConsole();
+      dm.displayImageToConsole();
+      
+      // second secret message
+      bc = new BarcodeImage(sImageIn_2);
+      dm.scan(bc);
+      dm.translateImageToText();
+      dm.displayTextToConsole();
+      dm.displayImageToConsole();
+      
+      // create your own message
+      dm.readText("What a great resume builder this is!");
+      dm.generateImageFromText();
+      dm.displayTextToConsole();
+      dm.displayImageToConsole();
     }
     
 }
@@ -269,7 +235,8 @@ class DataMatrix implements BarcodeIO // Roderick
     public DataMatrix(String text)
     {
         image = new BarcodeImage();
-        readText(text);
+        if(!readText(text))
+            readText(" ");
     }
     
     @Override
@@ -369,11 +336,7 @@ class DataMatrix implements BarcodeIO // Roderick
             if (cornerLocated) break;
         }
         
-        //System.out.println("left" + leftEdge);
-        //System.out.println("bottom" + bottomEdge);
-        
         moveImageToLowerLeft(leftEdge, bottomEdge);
-        
     }
     
     @Override
@@ -577,3 +540,64 @@ class DataMatrix implements BarcodeIO // Roderick
         this.image = newImage.clone();
     }
 }
+
+
+/**************RUN**************************************************************
+ * 
+CSUMB CSIT online program is top notch.
+-------------------------------------------
+|* * * * * * * * * * * * * * * * * * * * *|
+|*                                       *|
+|****** **** ****** ******* ** *** *****  |
+|*     *    ******************************|
+|* **    * *        **  *    * * *   *    |
+|*   *    *  *****    *   * *   *  **  ***|
+|*  **     * *** **   **  *    **  ***  * |
+|***  * **   **  *   ****    *  *  ** * **|
+|*****  ***  *  * *   ** ** **  *   * *   |
+|*****************************************|
+You did it!  Great work.  Celebrate.
+----------------------------------------
+|* * * * * * * * * * * * * * * * * * * |
+|*                                    *|
+|**** *** **   ***** ****   *********  |
+|* ************ ************ **********|
+|** *      *    *  * * *         * *   |
+|***   *  *           * **    *      **|
+|* ** * *  *   * * * **  *   ***   *** |
+|* *           **    *****  *   **   **|
+|****  *  * *  * **  ** *   ** *  * *  |
+|**************************************|
+What a great resume builder this is!
+----------------------------------------
+|*                                     |
+|***** * ***** ****** ******* **** **  |
+|* *********************************** |
+|**  *    *  * * **    *    * *  *  *  |
+|* *               *    **     **  *   |
+|**  *   * * *  * ***  * ***  *        |
+|**      **    * *    *     *    *  *  |
+|** *  * * **   *****  **  *    ** *** |
+|************************************* |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|* * * * * * * * * * * * * * * * * * * |
+|*                                    *|
+|**** *** **   ***** ****   *********  |
+|* ************ ************ **********|
+|** *      *    *  * * *         * *   |
+|***   *  *           * **    *      **|
+|* ** * *  *   * * * **  *   ***   *** |
+|* *           **    *****  *   **   **|
+|****  *  * *  * **  ** *   ** *  * *  |
+|**************************************|
+ *
+ * ****************************************************************************/
