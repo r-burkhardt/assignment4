@@ -262,7 +262,6 @@ class DataMatrix implements BarcodeIO // Roderick
     
     public DataMatrix(BarcodeImage image)
     {
-        
         scan(image);
         text = " ";
     }
@@ -276,8 +275,12 @@ class DataMatrix implements BarcodeIO // Roderick
     @Override
     public boolean readText(String text)
     {
-        this.text = text;
-        return true;
+        if (text.length() < BarcodeImage.MAX_WIDTH-2)
+        {
+            this.text = text;
+            return true;
+        }
+        return false;
     }
     
     @Override
