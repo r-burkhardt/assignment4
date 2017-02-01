@@ -55,49 +55,38 @@ public class Assignment4  // Roderick & Faye
         };
         String[] barcodeInfo2 =
         {
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "                                                                " +
-            "* * * * * * * * * * * * * * * * * * *                           " +
-            "*                                    *                          " +
-            "**** *** **   ***** ****   *********                            " +
-            "* ************ ************ **********                          " +
-            "** *      *    *  * * *         * *                             " +
-            "***   *  *           * **    *      **                          " +
-            "* ** * *  *   * * * **  *   ***   ***                           " +
-            "* *           **    *****  *   **   **                          " +
-            "****  *  * *  * **  ** *   ** *  * *                            " +
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "                                                                ",
+            "* * * * * * * * * * * * * * * * * * *                           ",
+            "*                                    *                          ",
+            "**** *** **   ***** ****   *********                            ",
+            "* ************ ************ **********                          ",
+            "** *      *    *  * * *         * *                             ",
+            "***   *  *           * **    *      **                          ",
+            "* ** * *  *   * * * **  *   ***   ***                           ",
+            "* *           **    *****  *   **   **                          ",
+            "****  *  * *  * **  ** *   ** *  * *                            ",
             "**************************************                          "
         };
-        /*int y = 0;
-        for (int s = 0; s < barcodeInfo.length; s++)
-        {
-            for (int c = 0; c < barcodeInfo[s].length(); c++)
-            {
-                if (barcodeInfo[s].charAt(c) == '*')
-                {
-                    testBar.setPixel(s, c, true);
-                }
-            }
-                
-        }*/
+        
         BarcodeImage testBar = new BarcodeImage(barcodeInfo2);
         
         //testBar.displayToConsole();
@@ -105,7 +94,7 @@ public class Assignment4  // Roderick & Faye
         DataMatrix test = new DataMatrix(testBar);
         
         test.displayImageToConsole();
-        test.displayRawImage();
+        //test.displayRawImage();
         //System.out.println(test.computeSignalWidth());
         //System.out.println(test.computeSignalHeight());
         // TODO code application logic here
@@ -131,9 +120,9 @@ class BarcodeImage implements Cloneable // Faye
     
     public BarcodeImage()
     {
-        image_data = new boolean[MAX_WIDTH][MAX_HEIGHT];
-        for(int i = 0; i < MAX_WIDTH; i++)
-            for(int j = 0; j < MAX_HEIGHT; j++)
+        image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
+        for(int i = 0; i < MAX_HEIGHT; i++)
+            for(int j = 0; j < MAX_WIDTH; j++)
                 image_data[i][j] = false;
     }
     
@@ -190,9 +179,9 @@ class BarcodeImage implements Cloneable // Faye
     
     public void displayToConsole()
     {
-        for(int i = 0; i < MAX_WIDTH; i++)
+        for(int i = 0; i < MAX_HEIGHT; i++)
         {
-            for (int j = 0; j < MAX_HEIGHT; j++)
+            for (int j = 0; j < MAX_WIDTH; j++)
             {
                 if(image_data[i][j] == true)
                     System.out.print("*");
@@ -283,18 +272,17 @@ class DataMatrix implements BarcodeIO // Roderick
         int left = 0;
         int right = 0;
         
-        for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
+        for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
         {
-            for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
+            for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
             {
-                if (left == 0 && image.getPixel(x, y))
-                    System.out.println(x);//left = x;
-                if (image.getPixel(x, y))
-                    System.out.println(x+1);//right = x+1;
+                if (left == 0 && image.getPixel(y, x))
+                    left = x;
+                if (image.getPixel(y, x))
+                    right = x+1;
             }
         }
-        return 0;
-        //return right - left;
+        return right - left;
     }
     
     private int computeSignalHeight()
@@ -302,17 +290,16 @@ class DataMatrix implements BarcodeIO // Roderick
         int top = 0;
         int bottom = 0;
         
-        for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
+        for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
         {
-            for (int y = 0; y < BarcodeImage.MAX_HEIGHT; y++)
+            for (int x = 0; x < BarcodeImage.MAX_WIDTH; x++)
             {
-                if (top == 0 && image.getPixel(x, y))
+                if (top == 0 && image.getPixel(y, x))
                     top = y;
-                if (image.getPixel(x, y))
+                if (image.getPixel(y, x))
                     bottom = y+1;
             }
         }
-        
         return bottom - top;
     }
     
@@ -349,21 +336,20 @@ class DataMatrix implements BarcodeIO // Roderick
     @Override
     public void displayImageToConsole()
     {
-        String displayString = "";
-        //System.out.println(computeSignalWidth());
-        //System.out.println(computeSignalHeight());
-//        for (int x = computeSignalWidth() - 1; x >= 0; x-- )
-//        {
-//            for (int y = BarcodeImage.MAX_HEIGHT - 1;
-//                    y >= (BarcodeImage.MAX_HEIGHT-computeSignalHeight()-1); y--)
-//            {
-//                if (image.getPixel(x, y))
-//                    displayString += '*';
-//                else
-//                    displayString += ' ';
-//            }
-//            displayString += "\n";
-//        }
+        String displayString = "****************************************";
+        for (int y = BarcodeImage.MAX_HEIGHT - computeSignalHeight();
+                    y < (BarcodeImage.MAX_HEIGHT-2); y++ )
+        {
+            for (int x = 1; x < computeSignalWidth(); x++)
+            {
+                if (image.getPixel(y, x))
+                    displayString += '*';
+                else
+                    displayString += ' ';
+            }
+            displayString += "\n";
+        }
+        
         System.out.println(displayString);
     }
     
@@ -412,7 +398,7 @@ class DataMatrix implements BarcodeIO // Roderick
         for (int y = BarcodeImage.MAX_HEIGHT- 2;
                 y > BarcodeImage.MAX_HEIGHT- 10; y--)
         {
-            if (this.image.getPixel(col, y))
+            if (this.image.getPixel(y, col))
             {
                 switch (rowCount)
                 {
